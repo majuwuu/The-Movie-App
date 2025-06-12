@@ -31,13 +31,13 @@ function App() {
 	};
 
 	return (
-		<div className="">
+		<div className=" max-h-[100%]">
 			<div className="w-full">
 				<Header navItems={navItems} userData={userData} />
 			</div>
 			<div className="flex">
 				{openSideBar ? (
-					<div className="w-full xs:absolute">
+					<div>
 						<SideBar
 							videos={videos}
 							category={category}

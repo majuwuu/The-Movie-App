@@ -9,6 +9,7 @@ createRoot(document.getElementById("root")!).render(
 			style={{
 				backgroundColor: "#17171B",
 				minHeight: "100vh",
+				overflowY: "hidden",
 			}}>
 			<App />
 		</div>

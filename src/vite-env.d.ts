@@ -1,1 +1,1 @@
-/// <reference types="vite/client" />
+declare module "@maj0codes/ui-library";

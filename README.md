@@ -13,12 +13,7 @@ npm run dev
 
 - your key:
   VITE_TMDB_API_TOKEN
-- your API token:
-  VITE_API_KEY
 
-
-
-### Available commands
 
 # run css build
 npm run build:css

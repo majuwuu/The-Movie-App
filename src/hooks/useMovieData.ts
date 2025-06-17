@@ -1,5 +1,4 @@
-// src/hooks/useMovieData.ts
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { discoverMovies } from "../services/tmdb.service";
 import {
 	Movie,
@@ -9,6 +8,7 @@ import {
 	PopularItem,
 	DiscoverMoviesResponse,
 } from "../types/types";
+import { ToastContext } from "./index";
 
 interface MovieData {
 	videos: VideoItem[];
@@ -20,6 +20,7 @@ interface MovieData {
 }
 
 export const useMovieData = (): MovieData => {
+	const { setToastType } = useContext(ToastContext);
 	const [videos, setVideos] = useState<VideoItem[]>([]);
 	const [bannerPromo, setBannerPromo] = useState<BannerPromo>(
 		{} as BannerPromo
@@ -35,9 +36,10 @@ export const useMovieData = (): MovieData => {
 		const fetchMovieData = async () => {
 			try {
 				setLoading(true);
-				const response: { data: DiscoverMoviesResponse } =
-					await discoverMovies();
-				const fetchedMovies: Movie[] = response.data.results;
+				const response = await discoverMovies();
+				const data: DiscoverMoviesResponse =
+					typeof response === "string" ? JSON.parse(response) : response.data;
+				const fetchedMovies: Movie[] = data.results;
 
 				const transformedVideos: VideoItem[] = fetchedMovies
 					.slice(0, 2)
@@ -124,14 +126,17 @@ export const useMovieData = (): MovieData => {
 					}));
 				setPopular(transformedPopular);
 			} catch (err) {
-				setError(err as Error);
+				const errorObj = err as Error;
+				setError(errorObj);
+				// 🔔 Mostrar el toast de error
+				setToastType?.("network_error");
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchMovieData();
-	}, []);
+	}, [setToastType]);
 
 	return { videos, bannerPromo, continueWatching, popular, loading, error };
 };
